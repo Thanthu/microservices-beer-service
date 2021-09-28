@@ -5,6 +5,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -15,12 +16,19 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.thanthu.beerservice.web.model.BeerDto;
+import com.thanthu.beerservice.web.model.BeerStyleEnum;
 
 @WebMvcTest(BeerController.class)
 class BeerControllerTest {
 	
 	private static final UUID beerId = UUID.randomUUID();
 	private BeerDto beerDto;
+	private BeerDto copyOfBeerDtoWithoutId;
+	private String beerName = "My Beer";
+	private BeerStyleEnum beerStyle = BeerStyleEnum.ALE;
+	private String upc = "My UPC";
+	private BigDecimal price = BigDecimal.TEN;
+	private Integer quantityOnHand = 1;
 	
 	@Autowired
 	MockMvc mockMvc;
@@ -29,6 +37,19 @@ class BeerControllerTest {
 	void setup() {
 		beerDto = BeerDto.builder()
 				.id(beerId)
+				.beerName(beerName)
+				.beerStyle(beerStyle)
+				.upc(upc)
+				.price(price)
+				.quantityOnHand(quantityOnHand)
+				.build();
+		
+		copyOfBeerDtoWithoutId = BeerDto.builder()
+				.beerName(beerName)
+				.beerStyle(beerStyle)
+				.upc(upc)
+				.price(price)
+				.quantityOnHand(quantityOnHand)
 				.build();
 		
 	}
@@ -45,7 +66,7 @@ class BeerControllerTest {
 
 		mockMvc.perform(post(BeerController.API_BASE_URL)
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(AbstractRestControllerTest.asJsonString(beerDto)))
+				.content(AbstractRestControllerTest.asJsonString(copyOfBeerDtoWithoutId)))
 		.andExpect(status().isCreated());
 	}
 
@@ -54,7 +75,7 @@ class BeerControllerTest {
 		
 		mockMvc.perform(put(BeerController.API_BASE_URL + "/" + beerId)
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(AbstractRestControllerTest.asJsonString(beerDto)))
+				.content(AbstractRestControllerTest.asJsonString(copyOfBeerDtoWithoutId)))
 		.andExpect(status().isNoContent());
 	}
 
