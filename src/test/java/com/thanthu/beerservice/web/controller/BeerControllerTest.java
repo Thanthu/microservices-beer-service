@@ -18,6 +18,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.thanthu.beerservice.bootstrap.BeerLoader;
 import com.thanthu.beerservice.services.BeerService;
 import com.thanthu.beerservice.web.model.BeerDto;
 import com.thanthu.beerservice.web.model.BeerStyleEnum;
@@ -30,7 +31,7 @@ class BeerControllerTest {
 	private BeerDto copyOfBeerDtoWithoutId;
 	private String beerName = "My Beer";
 	private BeerStyleEnum beerStyle = BeerStyleEnum.ALE;
-	private String upc = "My UPC";
+	private String upc = BeerLoader.BEER_1_UPC;
 	private BigDecimal price = BigDecimal.TEN;
 	private Integer quantityOnHand = 1;
 	
