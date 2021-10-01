@@ -5,7 +5,7 @@ import org.mapstruct.Mapper;
 import com.thanthu.beerservice.domain.Beer;
 import com.thanthu.beerservice.web.model.BeerDto;
 
-@Mapper(uses = { DateMapper.class })
+@Mapper(uses = { DateMapper.class }, componentModel = "spring")
 public interface BeerMapper {
 
     BeerDto beerToBeerDto(Beer beer);

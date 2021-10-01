@@ -4,6 +4,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -12,9 +14,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.thanthu.beerservice.services.BeerService;
 import com.thanthu.beerservice.web.model.BeerDto;
 import com.thanthu.beerservice.web.model.BeerStyleEnum;
 
@@ -32,6 +36,9 @@ class BeerControllerTest {
 	
 	@Autowired
 	MockMvc mockMvc;
+	
+	@MockBean
+    BeerService beerService;
 	
 	@BeforeEach
 	void setup() {
@@ -56,13 +63,16 @@ class BeerControllerTest {
 
 	@Test
 	void testGetBeerById() throws Exception {
-		
-		mockMvc.perform(get(BeerController.API_BASE_URL + "/" + beerId))
-		.andExpect(status().isOk());
+
+		given(beerService.getById(any())).willReturn(beerDto);
+
+		mockMvc.perform(get(BeerController.API_BASE_URL + "/" + beerId)).andExpect(status().isOk());
 	}
 
 	@Test
 	void testSaveNewBeer() throws Exception {
+		
+        given(beerService.saveNewBeer(any())).willReturn(beerDto);
 
 		mockMvc.perform(post(BeerController.API_BASE_URL)
 				.contentType(MediaType.APPLICATION_JSON)
@@ -72,6 +82,8 @@ class BeerControllerTest {
 
 	@Test
 	void testUpdateBeerById() throws Exception {
+		
+		given(beerService.updateBeer(any(), any())).willReturn(beerDto);
 		
 		mockMvc.perform(put(BeerController.API_BASE_URL + "/" + beerId)
 				.contentType(MediaType.APPLICATION_JSON)

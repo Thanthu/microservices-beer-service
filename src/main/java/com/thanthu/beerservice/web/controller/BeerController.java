@@ -13,33 +13,33 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.thanthu.beerservice.services.BeerService;
 import com.thanthu.beerservice.web.model.BeerDto;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @RequestMapping(BeerController.API_BASE_URL)
 @RestController
 public class BeerController {
-	
+
 	public static final String API_BASE_URL = "/api/v1/beer";
-	
+
+	private final BeerService beerService;
+
 	@GetMapping("/{beerId}")
-    public ResponseEntity<BeerDto> getBeerById(@PathVariable UUID beerId){
-		
-		//TODO impl
-        return new ResponseEntity<>(BeerDto.builder().build(), HttpStatus.OK);
-    }
+	public ResponseEntity<BeerDto> getBeerById(@PathVariable UUID beerId) {
+		return new ResponseEntity<>(beerService.getById(beerId), HttpStatus.OK);
+	}
 
-    @PostMapping
-    public ResponseEntity<Void> saveNewBeer(@RequestBody @Validated BeerDto beerDto){
-    	
-    	//TODO impl
-        return new ResponseEntity<Void>(HttpStatus.CREATED);
-    }
+	@PostMapping
+	public ResponseEntity<BeerDto> saveNewBeer(@RequestBody @Validated BeerDto beerDto) {
+		return new ResponseEntity<BeerDto>(beerService.saveNewBeer(beerDto), HttpStatus.CREATED);
+	}
 
-    @PutMapping("/{beerId}")
-    public ResponseEntity<Void> updateBeerById(@PathVariable UUID beerId, @RequestBody @Validated BeerDto beerDto){
-    	
-    	//TODO impl
-        return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
-    }
+	@PutMapping("/{beerId}")
+	public ResponseEntity<BeerDto> updateBeerById(@PathVariable UUID beerId, @RequestBody @Validated BeerDto beerDto) {
+		return new ResponseEntity<BeerDto>(beerService.updateBeer(beerId, beerDto), HttpStatus.NO_CONTENT);
+	}
 
 }
